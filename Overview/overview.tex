@@ -1,0 +1,58 @@
+\documentclass[a4paper]{article}
+\usepackage{hyperref}
+
+\begin{document}
+\section{Introduction}
+\textbf{Company Tycoon} is team building exercise designed for teams of 4-5 players. The game simulates the tough decisions that must be made by a technology startup.
+
+\section{Game Setup}
+Running the game requires:
+
+\begin{itemize}
+    \item Gamemaster (GM)
+    \item (Optional) Second person to walk around the room.\footnote{In play testing it is very useful to have someone answering questions so the GM can focus on running the game.} 
+    \item Teams of 4-5 players
+    \item The GM software (available at: \href{https://github.com/tawilkinson/company-tycoon}{https://github.com/tawilkinson/company-tycoon}), a cross-platform python program
+    \item Monopoly money or another way of visualising currency
+    \item Decision points card specific to your game
+\end{itemize}
+
+\subsection{Roles}
+
+\begin{description}
+    \item [CEO] Chief Executive Officer - Has deciding vote when team cannot agree.
+    \item [MD] Managing Director - Must keep track of the time and keep team on track.
+    \item [CTO] Chief Technical Officer - Can pick one \textbf{Decision Point} to focus their attention on. Reduces R\&D time for that project by 1 month.
+    \item [CFO] Chief Financial Officer - Must bring all decisions to \textbf{GM} with the money to pay for them. Keeps track of team finances.
+    \item [Marketing] (Optional for when 5 team members) For a cost\footnote{Set a reasonable price based on the costs in your game} can apply a multiplier to one system upgrade.
+\end{description}
+
+\section{Mechanics}
+
+\subsection{Time}
+
+This game runs well in 1 to 1.5 hours including a brief explanation. You can set the game time in the GM software. \textit{Default:} 1 hour 15 minutes.
+
+%\subsection{Time}
+
+\section{Decision Points}
+\textbf{Decision Points} are a key part of the game that reflect the tough decisions a real company must make. Once a team has made a decision has been selected by the team the CFO must come to the GM to pay for the development.
+\subsection{Required}
+Before teams can begin selling they must have researched the minimum components to make their device. All of the required decisions must be made before a team can generate revenue.\footnote{Remind them the clock is ticking!} A team may revisit a required choice later and pay any additional R\&D time and cost to upgrade that component.
+In general:
+\begin{itemize}
+    \item Required items should reflect components of the minimum viable product.
+    \item Think carefully about the development time. Technology that is off-the-shelf should have little to no research time but likely sells for less.
+    \item There's no reason why a required component can't reduce the overall sales price but this should be balanced by a larger modifier to sales chance as cheaper products, in general, sell better.
+\end{itemize}
+\subsection{Upgrades}
+Upgrades increase the selling cost of the company's device. Functionally they imply a modifier to the selling price that the GM sets in the config ahead of the game. Players do not need to know the exact modifier but should have a hint as to whether an upgrade increases sales chance and it should list the change in list price of the product. While upgrades can be researched before required items.
+
+In general:
+\begin{itemize}
+    \item Upgrades that significantly increase sales chance and sales price should cost more money and take longer to develop.
+    \item Some of the upgrades should only increase price or sales chance but not both.
+    \item There is no problem in having multiple options that have a small effect on either sales chance or sales price. Researching lots of quick/cheap things to increase your odds is a solid strategy.
+\end{itemize}
+% \section{Glossary}*
+\end{document}
