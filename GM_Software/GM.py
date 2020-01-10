@@ -21,67 +21,67 @@ class App:
         self.load_json_cfg()
 
         fmaster = Frame(master)
-        fmaster.pack()
+        fmaster.grid()
         self.dyn_team = defaultdict(list)
         self.tab = Notebook(fmaster)
-        self.tab.pack()
+        self.tab.grid()
         self.f1 = Frame(self.tab)
         self.f2 = Frame(self.tab)
         self.f3 = Frame(self.tab)
         self.f1_top = Frame(self.f1)
-        self.f1_top.pack()
+        self.f1_top.grid()
         self.f1_bottom = Frame(self.f1)
-        self.f1_bottom.pack()
+        self.f1_bottom.grid()
         self.running = 0
         self.tn = 5
         vcmd = (master.register(self.validate),
                 "%d", "%i", "%P", "%s", "%S", "%v", "%V", "%W")
         spdlbl = Label(self.f1_top, text="Speed:")
-        spdlbl.pack(side=LEFT)
+        spdlbl.grid(sticky="W", row=0, column=0)
         self.spd = StringVar(master, value="1")
         self.spdbx = Entry(self.f1_top, width=3, validate="key",
                            validatecommand=vcmd, textvariable=self.spd)
-        self.spdbx.pack(side=LEFT)
+        self.spdbx.grid(sticky="W", row=0, column=1)
         tmrlbl = Label(self.f1_top, text="Game Length:")
-        tmrlbl.pack(side=LEFT)
+        tmrlbl.grid(sticky="W", row=0, column=2)
         self.t = StringVar(master, value="75:00")
         self.gt = int(self.t.get()[:-3]) * 60
         self.mins, secs = divmod(self.gt, 60)
         self.tmr = Entry(self.f1_top, width=6, validate="key",
                          validatecommand=vcmd, textvariable=self.t)
-        self.tmr.pack(side=LEFT)
+        self.tmr.grid(sticky="W", row=0, column=3)
         self.start = Button(self.f1_top, text="START",
                             command=self.gamestart)
-        self.start.pack(side=LEFT)
+        self.start.grid(sticky="W", row=0, column=4)
         self.pausebtn = Button(self.f1_top, text="PAUSE",
                                command=self.gamepause)
-        self.pausebtn.pack(side=LEFT)
+        self.pausebtn.grid(sticky="W", row=0, column=5)
         self.reset = Button(self.f1_top, text="RESET",
                             command=self.gamereset)
-        self.reset.pack(side=LEFT)
+        self.reset.grid(sticky="W", row=0, column=6)
         self.boon_one = IntVar()
         self.boonone_btn = Checkbutton(self.f1_top, text=self.boon_data[0]["name"],
                                        variable=self.boon_one)
-        self.boonone_btn.pack(side=LEFT)
+        self.boonone_btn.grid(sticky="W", row=0, column=7)
         self.boon_two = IntVar()
         self.boontwo_btn = Checkbutton(self.f1_top, text=self.boon_data[1]["name"],
                                        variable=self.boon_two)
-        self.boontwo_btn.pack(side=LEFT)
+        self.boontwo_btn.grid(sticky="W", row=0, column=8)
         self.boon_three = IntVar()
         self.boonthree_btn = Checkbutton(self.f1_top, text=self.boon_data[2]["name"],
                                          variable=self.boon_three)
-        self.boonthree_btn.pack(side=LEFT)
+        self.boonthree_btn.grid(sticky="W", row=0, column=9)
         self.mes = StringVar(master, value="")
         self.text_box = Entry(self.f1, textvariable=self.mes, width=80)
-        self.text_box.pack()
+        self.text_box.grid()
 
         self.teamer()
 
         self.salegraph = Canvas(self.f2)
-        self.salegraph.pack(side="top", fill="both", expand=True)
+        self.salegraph.grid(sticky="N")
 
         self.revgraph = Canvas(self.f3)
-        self.revgraph.pack(side="top", fill="both", expand=True)
+        self.revgraph.grid(sticky="N")
 
         colours = ["red", "blue", "green", "purple", "orange", "black"]
 
@@ -129,11 +129,11 @@ class App:
 
     def framer(self, i):
         f = LabelFrame(self.f1_bottom, text=self.teams[i])
-        f.pack(side=LEFT, padx=2, pady=2)
         row_n = 1
 
         for section in self.cfg_data:
             row_n = self.section_builder(section, i, row_n, f)
+        f.grid(sticky="W", row=1, column=i, padx=2, pady=2)
 
     def research(self):
         for i in range(self.tn):
@@ -319,13 +319,13 @@ class App:
 
     def multi(self, i, mod):
         i = int(i[-1:]) - 1
-        nuclei = self.dyn_team[i][15].get() + self.dyn_team[i][16].get() +\
+        nuclei = self.dyn_team[i][15].get() + self.dyn_team[i][16].get() + \
             self.dyn_team[i][17].get() + self.dyn_team[i][18].get()
         if nuclei == 4:
             mod = mod + 0.4
             if self.dyn_team[i][12]:
                 mod = mod + 0.2
-        cryo = self.dyn_team[i][19].get() + self.dyn_team[i][20].get() +\
+        cryo = self.dyn_team[i][19].get() + self.dyn_team[i][20].get() + \
             self.dyn_team[i][22].get() * self.dyn_team[i][10].get()
         if cryo > 0:
             mod = mod + 0.2
@@ -386,9 +386,6 @@ class App:
         graph.coords(line, *coords)
         graph.configure(scrollregion=graph.bbox("all"))
 
-    def add_team(self):
-        frame = Frame(self.f1)
-
     def teamer(self):
         self.teams = []
         self.sales = {}
@@ -421,8 +418,8 @@ class App:
                 return True
             except ValueError:
                 return False
-            else:
-                return False
+        else:
+            return False
 
 
 root = ThemedTk(theme="plastik")
