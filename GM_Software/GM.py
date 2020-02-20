@@ -9,6 +9,7 @@ import os
 import random
 import json
 import logging
+import threading
 
 
 class App:
@@ -20,68 +21,65 @@ class App:
         logging.info("Start Time: " + time.asctime(time.localtime()))
         self.load_json_cfg()
 
-        fmaster = Frame(master)
-        fmaster.grid()
+        self.fmaster = Frame(master)
+
         self.dyn_team = defaultdict(list)
-        self.tab = Notebook(fmaster)
-        self.tab.grid()
+        self.tab = Notebook(self.fmaster)
+
         self.f1 = Frame(self.tab)
         self.f2 = Frame(self.tab)
         self.f3 = Frame(self.tab)
         self.f1_top = Frame(self.f1)
-        self.f1_top.grid()
+
         self.f1_bottom = Frame(self.f1)
-        self.f1_bottom.grid()
+
         self.running = 0
         self.tn = 5
         vcmd = (master.register(self.validate),
                 "%d", "%i", "%P", "%s", "%S", "%v", "%V", "%W")
-        spdlbl = Label(self.f1_top, text="Speed:")
-        spdlbl.grid(sticky="W", row=0, column=0)
+        self.spdlbl = Label(self.f1_top, text="Speed:")
+
         self.spd = StringVar(master, value="1")
         self.spdbx = Entry(self.f1_top, width=3, validate="key",
                            validatecommand=vcmd, textvariable=self.spd)
-        self.spdbx.grid(sticky="W", row=0, column=1)
-        tmrlbl = Label(self.f1_top, text="Game Length:")
-        tmrlbl.grid(sticky="W", row=0, column=2)
+
+        self.tmrlbl = Label(self.f1_top, text="Game Length:")
+
         self.t = StringVar(master, value="75:00")
         self.gt = int(self.t.get()[:-3]) * 60
         self.mins, secs = divmod(self.gt, 60)
         self.tmr = Entry(self.f1_top, width=6, validate="key",
                          validatecommand=vcmd, textvariable=self.t)
-        self.tmr.grid(sticky="W", row=0, column=3)
+
         self.start = Button(self.f1_top, text="START",
                             command=self.gamestart)
-        self.start.grid(sticky="W", row=0, column=4)
+
         self.pausebtn = Button(self.f1_top, text="PAUSE",
                                command=self.gamepause)
-        self.pausebtn.grid(sticky="W", row=0, column=5)
+
         self.reset = Button(self.f1_top, text="RESET",
                             command=self.gamereset)
-        self.reset.grid(sticky="W", row=0, column=6)
+
         self.boon_one = IntVar()
         self.boonone_btn = Checkbutton(self.f1_top, text=self.boon_data[0]["name"],
                                        variable=self.boon_one)
-        self.boonone_btn.grid(sticky="W", row=0, column=7)
+
         self.boon_two = IntVar()
         self.boontwo_btn = Checkbutton(self.f1_top, text=self.boon_data[1]["name"],
                                        variable=self.boon_two)
-        self.boontwo_btn.grid(sticky="W", row=0, column=8)
+
         self.boon_three = IntVar()
         self.boonthree_btn = Checkbutton(self.f1_top, text=self.boon_data[2]["name"],
                                          variable=self.boon_three)
-        self.boonthree_btn.grid(sticky="W", row=0, column=9)
+
         self.mes = StringVar(master, value="")
         self.text_box = Entry(self.f1, textvariable=self.mes, width=80)
-        self.text_box.grid()
 
         self.teamer()
 
         self.salegraph = Canvas(self.f2)
-        self.salegraph.grid(sticky="N")
 
         self.revgraph = Canvas(self.f3)
-        self.revgraph.grid(sticky="N")
 
         colours = ["red", "blue", "green", "purple", "orange", "black"]
 
@@ -98,6 +96,24 @@ class App:
         self.tab.add(self.f1, text="Game")
         self.tab.add(self.f2, text="Sales")
         self.tab.add(self.f3, text="Revenue")
+
+        self.fmaster.grid()
+        self.tab.grid()
+        self.f1_top.grid()
+        self.f1_bottom.grid()
+        self.spdlbl.grid(sticky="W", row=0, column=0)
+        self.spdbx.grid(sticky="W", row=0, column=1)
+        self.tmrlbl.grid(sticky="W", row=0, column=2)
+        self.tmr.grid(sticky="W", row=0, column=3)
+        self.start.grid(sticky="W", row=0, column=4)
+        self.pausebtn.grid(sticky="W", row=0, column=5)
+        self.reset.grid(sticky="W", row=0, column=6)
+        self.boonone_btn.grid(sticky="W", row=0, column=7)
+        self.boontwo_btn.grid(sticky="W", row=0, column=8)
+        self.boonthree_btn.grid(sticky="W", row=0, column=9)
+        self.text_box.grid()
+        self.salegraph.grid(sticky="N")
+        self.revgraph.grid(sticky="N")
 
     def write(self, message):
         self.mes.set(message)
@@ -422,8 +438,9 @@ class App:
             return False
 
 
-root = ThemedTk(theme="plastik")
-root.resizable(False, False)
-root.title("Company Tycoon")
-app = App(root)
-root.mainloop()
+if __name__ == "__main__":
+    root = ThemedTk(theme="plastik")
+    root.resizable(False, False)
+    root.title("Company Tycoon")
+    app = App(root)
+    root.mainloop()
