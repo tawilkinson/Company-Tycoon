@@ -18,15 +18,15 @@ class App:
     def __init__(self, master):
 
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
-        timestamp = time.strftime("%Y%m%d-%H%M%S")
-        log_name = os.path.join(self.script_dir, f"{timestamp}-GM.log")
+        log_name = os.path.join(self.script_dir, f"GM.log")
         logging.basicConfig(filename=log_name, level=logging.DEBUG)
         logging.info("Start Time: " + time.asctime(time.localtime()))
 
         # If there are multiple configs, offer a choice
         configs = get_configs("../Configs")
         if len(configs) > 0:
-            self.load_json_cfg()
+            chosen_config = configs[self.pick_config(configs)]
+            self.load_json_cfg(chosen_config)
         else:
             self.load_json_cfg()
 
@@ -481,6 +481,44 @@ class App:
                 return False
         else:
             return False
+
+    def pick_config(self, config_dirs):
+        suggestions = []
+        for i in range(len(config_dirs)):
+            suggestions.append((i, os.path.basename(config_dirs[i])))
+        popup = SuggestionPopup(root, suggestions)
+        result = popup.show()
+        return result[0]
+
+
+class SuggestionPopup(tk.Toplevel):
+    def __init__(self, parent, suggestions):
+        super().__init__(parent)
+
+        self.title("Select suggestion")
+
+        self.listbox = tk.Listbox(self, height=10, width=20)
+        self.listbox.pack(pady=15)
+
+        self.btn = tk.Button(self, text="Confirm selection", command=self.select)
+        self.btn.pack(pady=10)
+
+        for (idd, info) in suggestions:
+            self.listbox.insert(tk.END, info)
+
+        self.selection = None
+
+    def select(self):
+        selection = self.listbox.curselection()
+        if selection:
+            self.selection = (selection[0], self.listbox.get(selection[0]))
+        self.destroy()
+
+    def show(self):
+        self.deiconify()
+        self.wm_protocol("WM_DELETE_WINDOW", self.destroy)
+        self.wait_window(self)
+        return self.selection
 
 
 if __name__ == "__main__":
