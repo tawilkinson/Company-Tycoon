@@ -1,0 +1,16 @@
+[{
+        "name": "Component Shortage",
+        "multiplier": "-0.5",
+        "upgrade": "0"
+    },
+    {
+        "name": "Component Boon",
+        "multiplier": "0.2",
+        "upgrade": "0"
+    },
+    {
+        "name": "Component 2 Shortage",
+        "multiplier": "-0.6",
+        "upgrade": "2"
+    }
+]

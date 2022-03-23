@@ -1,0 +1,186 @@
+[{
+        "section": "Magnet",
+        "required": "True",
+        "upgrades": [{
+                "name": "'Wet' Magnet",
+                "duration": "0",
+                "sales_multiplier": "0",
+                "price_modifier": "0"
+            },
+            {
+                "name": "Cryogen Free",
+                "duration": "3",
+                "sales_multiplier": "0.1",
+                "price_modifier": "0"
+            },
+            {
+                "name": "Permanent",
+                "duration": "0",
+                "sales_multiplier": "0.1",
+                "price_modifier": "-150000"
+            }
+        ]
+    },
+    {
+        "section": "Subject Table",
+        "required": "True",
+        "upgrades": [{
+                "name": "Manual",
+                "duration": "3",
+                "sales_multiplier": "0",
+                "price_modifier": "0"
+            },
+            {
+                "name": "Automated",
+                "duration": "6",
+                "sales_multiplier": "0.3",
+                "price_modifier": "50000"
+            }
+        ]
+    },
+    {
+        "section": "Casing",
+        "required": "True",
+        "upgrades": [{
+                "name": "Bare",
+                "duration": "0",
+                "sales_multiplier": "0",
+                "price_modifier": "0"
+            },
+            {
+                "name": "Covers",
+                "duration": "1",
+                "sales_multiplier": "0.1",
+                "price_modifier": "10000"
+            }
+        ]
+    },
+    {
+        "section": "User Software",
+        "required": "True",
+        "upgrades": [{
+                "name": "Standard",
+                "duration": "3",
+                "sales_multiplier": "0",
+                "price_modifier": "0"
+            },
+            {
+                "name": "Pretty",
+                "duration": "6",
+                "sales_multiplier": "0.1",
+                "price_modifier": "10000"
+            }
+        ]
+    },
+    {
+        "section": "Field Strength",
+        "required": "True",
+        "upgrades": [{
+                "name": "0.1 Tesla",
+                "duration": "3",
+                "sales_multiplier": "0.1",
+                "price_modifier": "10000"
+            },
+            {
+                "name": "0.55 Tesla",
+                "duration": "3",
+                "sales_multiplier": "0",
+                "price_modifier": "0"
+            },
+            {
+                "name": "1.5 Tesla",
+                "duration": "3",
+                "sales_multiplier": "0",
+                "price_modifier": "0"
+            },
+            {
+                "name": "3 Tesla",
+                "duration": "3",
+                "sales_multiplier": "0.1",
+                "price_modifier": "0"
+            },
+            {
+                "name": "4.7 Tesla",
+                "duration": "3",
+                "sales_multiplier": "0.2",
+                "price_modifier": "50000"
+            },
+            {
+                "name": "7 Tesla",
+                "duration": "3",
+                "sales_multiplier": "0.3",
+                "price_modifier": "100000"
+            }
+        ]
+    },
+    {
+        "section": "Upgrades",
+        "required": "False",
+        "upgrades": [{
+                "name": "PET",
+                "duration": "12",
+                "sales_multiplier": "0.5",
+                "price_modifier": "150000"
+            },
+            {
+                "name": "Cryo Probes",
+                "duration": "6",
+                "sales_multiplier": "0.5",
+                "price_modifier": "50000"
+            },
+            {
+                "name": "Large Animals",
+                "duration": "6",
+                "sales_multiplier": "0.2",
+                "price_modifier": "40000"
+            },
+            {
+                "name": "Spectroscopy",
+                "duration": "2",
+                "sales_multiplier": "0.2",
+                "price_modifier": "10000"
+            },
+            {
+                "name": "DWI",
+                "duration": "4",
+                "sales_multiplier": "0.2",
+                "price_modifier": "50000"
+            },
+            {
+                "name": "Cardiac",
+                "duration": "3",
+                "sales_multiplier": "0.3",
+                "price_modifier": "20000"
+            }
+        ]
+    },
+    {
+        "section": "Additional Nuclei",
+        "required": "False",
+        "upgrades": [{
+                "name": "13C",
+                "duration": "2",
+                "sales_multiplier": "0.2",
+                "price_modifier": "20000"
+            },
+            {
+                "name": "129 Xe",
+                "duration": "2",
+                "sales_multiplier": "0.1",
+                "price_modifier": "10000"
+            },
+            {
+                "name": "19F",
+                "duration": "2",
+                "sales_multiplier": "0.1",
+                "price_modifier": "5000"
+            },
+            {
+                "name": "23Na",
+                "duration": "2",
+                "sales_multiplier": "0.1",
+                "price_modifier": "10000"
+            }
+        ]
+    }
+]
