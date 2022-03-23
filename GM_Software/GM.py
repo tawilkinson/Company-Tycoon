@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter.ttk import *
+import tkinter as tk
+from tkinter import ttk
 from ttkthemes import ThemedTk
 import time
 from threading import Thread
@@ -21,77 +21,94 @@ class App:
         logging.info("Start Time: " + time.asctime(time.localtime()))
         self.load_json_cfg()
 
-        self.fmaster = Frame(master)
+        self.fmaster = tk.Frame(master)
 
         self.dyn_team = defaultdict(list)
-        self.tab = Notebook(self.fmaster)
+        self.tab = ttk.Notebook(self.fmaster)
 
-        self.f1 = Frame(self.tab)
-        self.f2 = Frame(self.tab)
-        self.f3 = Frame(self.tab)
-        self.f1_top = Frame(self.f1)
+        self.f1 = tk.Frame(self.tab)
+        self.f2 = tk.Frame(self.tab)
+        self.f3 = tk.Frame(self.tab)
+        self.f1_top = tk.Frame(self.f1)
 
-        self.f1_bottom = Frame(self.f1)
+        self.f1_bottom = tk.Frame(self.f1)
 
         self.running = 0
         self.tn = 5
-        vcmd = (master.register(self.validate),
-                "%d", "%i", "%P", "%s", "%S", "%v", "%V", "%W")
-        self.spdlbl = Label(self.f1_top, text="Speed:")
+        vcmd = (
+            master.register(self.validate),
+            "%d",
+            "%i",
+            "%P",
+            "%s",
+            "%S",
+            "%v",
+            "%V",
+            "%W",
+        )
+        self.spdlbl = tk.Label(self.f1_top, text="Speed:")
 
-        self.spd = StringVar(master, value="1")
-        self.spdbx = Entry(self.f1_top, width=3, validate="key",
-                           validatecommand=vcmd, textvariable=self.spd)
+        self.spd = tk.StringVar(master, value="1")
+        self.spdbx = tk.Entry(
+            self.f1_top,
+            width=3,
+            validate="key",
+            validatecommand=vcmd,
+            textvariable=self.spd,
+        )
 
-        self.tmrlbl = Label(self.f1_top, text="Game Length:")
+        self.tmrlbl = tk.Label(self.f1_top, text="Game Length:")
 
-        self.t = StringVar(master, value="75:00")
+        self.t = tk.StringVar(master, value="75:00")
         self.gt = int(self.t.get()[:-3]) * 60
         self.mins, secs = divmod(self.gt, 60)
-        self.tmr = Entry(self.f1_top, width=6, validate="key",
-                         validatecommand=vcmd, textvariable=self.t)
+        self.tmr = tk.Entry(
+            self.f1_top,
+            width=6,
+            validate="key",
+            validatecommand=vcmd,
+            textvariable=self.t,
+        )
 
-        self.start = Button(self.f1_top, text="START",
-                            command=self.gamestart)
+        self.start = tk.Button(self.f1_top, text="START", command=self.gamestart)
 
-        self.pausebtn = Button(self.f1_top, text="PAUSE",
-                               command=self.gamepause)
+        self.pausebtn = tk.Button(self.f1_top, text="PAUSE", command=self.gamepause)
 
-        self.reset = Button(self.f1_top, text="RESET",
-                            command=self.gamereset)
+        self.reset = tk.Button(self.f1_top, text="RESET", command=self.gamereset)
 
-        self.boon_one = IntVar()
-        self.boonone_btn = Checkbutton(self.f1_top, text=self.boon_data[0]["name"],
-                                       variable=self.boon_one)
+        self.boon_one = tk.IntVar()
+        self.boonone_btn = tk.Checkbutton(
+            self.f1_top, text=self.boon_data[0]["name"], variable=self.boon_one
+        )
 
-        self.boon_two = IntVar()
-        self.boontwo_btn = Checkbutton(self.f1_top, text=self.boon_data[1]["name"],
-                                       variable=self.boon_two)
+        self.boon_two = tk.IntVar()
+        self.boontwo_btn = tk.Checkbutton(
+            self.f1_top, text=self.boon_data[1]["name"], variable=self.boon_two
+        )
 
-        self.boon_three = IntVar()
-        self.boonthree_btn = Checkbutton(self.f1_top, text=self.boon_data[2]["name"],
-                                         variable=self.boon_three)
+        self.boon_three = tk.IntVar()
+        self.boonthree_btn = tk.Checkbutton(
+            self.f1_top, text=self.boon_data[2]["name"], variable=self.boon_three
+        )
 
-        self.mes = StringVar(master, value="")
-        self.text_box = Entry(self.f1, textvariable=self.mes, width=80)
+        self.mes = tk.StringVar(master, value="")
+        self.text_box = tk.Entry(self.f1, textvariable=self.mes, width=80)
 
         self.teamer()
 
-        self.salegraph = Canvas(self.f2)
+        self.salegraph = tk.Canvas(self.f2)
 
-        self.revgraph = Canvas(self.f3)
+        self.revgraph = tk.Canvas(self.f3)
 
         colours = ["red", "blue", "green", "purple", "orange", "black"]
 
         self.s_line = []
         for i in range(self.tn):
-            self.s_line.append(self.salegraph.create_line(0, 0, 0, 0,
-                                                          fill=colours[i]))
+            self.s_line.append(self.salegraph.create_line(0, 0, 0, 0, fill=colours[i]))
 
         self.r_line = []
         for i in range(self.tn):
-            self.r_line.append(self.revgraph.create_line(0, 0, 0, 0,
-                                                         fill=colours[i]))
+            self.r_line.append(self.revgraph.create_line(0, 0, 0, 0, fill=colours[i]))
 
         self.tab.add(self.f1, text="Game")
         self.tab.add(self.f2, text="Sales")
@@ -123,7 +140,7 @@ class App:
         col_n = 2 * i
         if section["required"] == "True":
             label_text += "*"
-        label = Label(f, text=label_text, font="Verdana 10 bold")
+        label = tk.Label(f, text=label_text, font="Verdana 10 bold")
         label.grid(row=row_n, column=col_n, columnspan=2)
         row_n += 1
         counter = 1
@@ -138,13 +155,13 @@ class App:
 
     def upgrade_bulider(self, upgrade, col_n, row_n, i, f):
 
-        var = IntVar()
+        var = tk.IntVar()
         self.dyn_team[i].append(var)
-        check_btn = Checkbutton(f, text=upgrade["name"], variable=var)
+        check_btn = tk.Checkbutton(f, text=upgrade["name"], variable=var)
         check_btn.grid(sticky="W", row=row_n, column=col_n)
 
     def framer(self, i):
-        f = LabelFrame(self.f1_bottom, text=self.teams[i])
+        f = tk.LabelFrame(self.f1_bottom, text=self.teams[i])
         row_n = 1
 
         for section in self.cfg_data:
@@ -243,7 +260,7 @@ class App:
 
     def g_rand(self):
         random.seed()
-        return(random.randint(0, 100))
+        return random.randint(0, 100)
 
     def sale(self):
         data = self.timeformat + ": "
@@ -287,10 +304,8 @@ class App:
                     for u in s["upgrades"]:
                         logging.debug("    Name: " + u["name"])
                         logging.debug("    Required: " + u["duration"])
-                        logging.debug("    Sales Multiplier: " +
-                                      u["sales_multiplier"])
-                        logging.debug("    Price Modifier: " +
-                                      u["price_modifier"])
+                        logging.debug("    Sales Multiplier: " + u["sales_multiplier"])
+                        logging.debug("    Price Modifier: " + u["price_modifier"])
                         logging.debug("    _________________")
                     logging.debug("_________________")
 
@@ -313,9 +328,11 @@ class App:
         for section in self.cfg_data:
             for upgrade in section["upgrades"]:
                 for k in self.teams:
-                    self.cfg[k + str(j)] = [upgrade["duration"],
-                                            upgrade["sales_multiplier"],
-                                            upgrade["price_modifier"]]
+                    self.cfg[k + str(j)] = [
+                        upgrade["duration"],
+                        upgrade["sales_multiplier"],
+                        upgrade["price_modifier"],
+                    ]
                 j += 1
 
     def mod(self, i):
@@ -335,26 +352,35 @@ class App:
 
     def multi(self, i, mod):
         i = int(i[-1:]) - 1
-        nuclei = self.dyn_team[i][15].get() + self.dyn_team[i][16].get() + \
-            self.dyn_team[i][17].get() + self.dyn_team[i][18].get()
+        nuclei = (
+            self.dyn_team[i][15].get()
+            + self.dyn_team[i][16].get()
+            + self.dyn_team[i][17].get()
+            + self.dyn_team[i][18].get()
+        )
         if nuclei == 4:
             mod = mod + 0.4
             if self.dyn_team[i][12]:
                 mod = mod + 0.2
-        cryo = self.dyn_team[i][19].get() + self.dyn_team[i][20].get() + \
-            self.dyn_team[i][22].get() * self.dyn_team[i][10].get()
+        cryo = (
+            self.dyn_team[i][19].get()
+            + self.dyn_team[i][20].get()
+            + self.dyn_team[i][22].get() * self.dyn_team[i][10].get()
+        )
         if cryo > 0:
             mod = mod + 0.2
         return mod
 
     def go(self):
         for i in range(self.tn):
-            mag = self.dyn_team[i][0].get() + self.dyn_team[i][1].get() + \
-                self.dyn_team[i][2].get()
+            mag = (
+                self.dyn_team[i][0].get()
+                + self.dyn_team[i][1].get()
+                + self.dyn_team[i][2].get()
+            )
             rack = self.dyn_team[i][3].get() + self.dyn_team[i][4].get()
             cover = self.dyn_team[i][5].get() + self.dyn_team[i][6].get()
-            software = self.dyn_team[i][7].get() + \
-                self.dyn_team[i][8].get()
+            software = self.dyn_team[i][7].get() + self.dyn_team[i][8].get()
             tot = mag + rack + cover + software
             if tot > 3:
                 self.prod[self.teams[i]] = True
@@ -425,9 +451,17 @@ class App:
             self.rev[self.teams[i]] = -4000000
             self.prod[self.teams[i]] = False
 
-    def validate(self, action, index, value_if_allowed,
-                 prior_value, text, validation_type, trigger_type,
-                 widget_name):
+    def validate(
+        self,
+        action,
+        index,
+        value_if_allowed,
+        prior_value,
+        text,
+        validation_type,
+        trigger_type,
+        widget_name,
+    ):
         if text in "0123456789:":
             try:
                 int(value_if_allowed)
@@ -439,7 +473,7 @@ class App:
 
 
 if __name__ == "__main__":
-    root = ThemedTk(theme="plastik")
+    root = ThemedTk(theme="equilux")
     root.resizable(False, False)
     root.title("Company Tycoon")
     app = App(root)
