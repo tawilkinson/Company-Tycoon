@@ -499,7 +499,7 @@ class SuggestionPopup(tk.Toplevel):
         self.title("Select suggestion")
 
         self.focus_set()
-        self.attributes('-topmost', True)
+        self.attributes("-topmost", True)
         self.listbox = tk.Listbox(self, height=10, width=20)
         self.listbox.pack(pady=15)
 
