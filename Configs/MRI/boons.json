@@ -1,0 +1,16 @@
+[{
+        "name": "Helium Shortage",
+        "multiplier": "-0.5",
+        "upgrade": "0"
+    },
+    {
+        "name": "Helium Boon",
+        "multiplier": "0.2",
+        "upgrade": "0"
+    },
+    {
+        "name": "Rare-Earth Shortage",
+        "multiplier": "-0.6",
+        "upgrade": "2"
+    }
+]
