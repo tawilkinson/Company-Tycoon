@@ -290,7 +290,11 @@ class App:
 
         return data, sales, revenue
 
-    def load_json_cfg(self, config="config.json", boons="boons.json"):
+    def load_json_cfg(
+        self,
+        config="../Configs/Default/config.json",
+        boons="../Configs/Default/boons.json",
+    ):
         conf = os.path.join(self.script_dir, config)
         logging.info(conf)
 
