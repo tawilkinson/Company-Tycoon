@@ -495,8 +495,11 @@ class SuggestionPopup(tk.Toplevel):
     def __init__(self, parent, suggestions):
         super().__init__(parent)
 
+        self.parent = parent
         self.title("Select suggestion")
 
+        self.focus_set()
+        self.attributes('-topmost', True)
         self.listbox = tk.Listbox(self, height=10, width=20)
         self.listbox.pack(pady=15)
 
@@ -518,6 +521,7 @@ class SuggestionPopup(tk.Toplevel):
         self.deiconify()
         self.wm_protocol("WM_DELETE_WINDOW", self.destroy)
         self.wait_window(self)
+
         return self.selection
 
 
