@@ -10,16 +10,25 @@ import random
 import json
 import logging
 import threading
+import time
+from utils import get_configs
 
 
 class App:
     def __init__(self, master):
 
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
-        log_name = os.path.join(self.script_dir, "GM.log")
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        log_name = os.path.join(self.script_dir, f"{timestamp}-GM.log")
         logging.basicConfig(filename=log_name, level=logging.DEBUG)
         logging.info("Start Time: " + time.asctime(time.localtime()))
-        self.load_json_cfg()
+
+        # If there are multiple configs, offer a choice
+        configs = get_configs("../Configs")
+        if len(configs) > 0:
+            self.load_json_cfg()
+        else:
+            self.load_json_cfg()
 
         self.fmaster = tk.Frame(master)
 
@@ -290,11 +299,9 @@ class App:
 
         return data, sales, revenue
 
-    def load_json_cfg(
-        self,
-        config="../Configs/Default/config.json",
-        boons="../Configs/Default/boons.json",
-    ):
+    def load_json_cfg(self, config_dir="../Configs/Default"):
+        config = os.path.join(config_dir, "config.json")
+        boons = os.path.join(config_dir, "boons.json")
         conf = os.path.join(self.script_dir, config)
         logging.info(conf)
 
