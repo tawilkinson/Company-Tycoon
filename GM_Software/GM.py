@@ -43,7 +43,7 @@ class App:
         self.f1_bottom = tk.Frame(self.f1)
 
         self.running = 0
-        self.tn = 5
+        self.tn = 8
         vcmd = (
             master.register(self.validate),
             "%d",
@@ -79,11 +79,14 @@ class App:
             textvariable=self.t,
         )
 
-        self.start = tk.Button(self.f1_top, text="START", command=self.gamestart)
+        self.start = tk.Button(self.f1_top, text="START",
+                               command=self.gamestart)
 
-        self.pausebtn = tk.Button(self.f1_top, text="PAUSE", command=self.gamepause)
+        self.pausebtn = tk.Button(
+            self.f1_top, text="PAUSE", command=self.gamepause)
 
-        self.reset = tk.Button(self.f1_top, text="RESET", command=self.gamereset)
+        self.reset = tk.Button(self.f1_top, text="RESET",
+                               command=self.gamereset)
 
         self.boon_one = tk.IntVar()
         self.boonone_btn = tk.Checkbutton(
@@ -109,15 +112,18 @@ class App:
 
         self.revgraph = tk.Canvas(self.f3)
 
-        colours = ["red", "blue", "green", "purple", "orange", "black"]
+        colours = ["red", "blue", "green", "purple",
+                   "orange", "black", "yellow", "grey", "brown"]
 
         self.s_line = []
         for i in range(self.tn):
-            self.s_line.append(self.salegraph.create_line(0, 0, 0, 0, fill=colours[i]))
+            self.s_line.append(self.salegraph.create_line(
+                0, 0, 0, 0, fill=colours[i]))
 
         self.r_line = []
         for i in range(self.tn):
-            self.r_line.append(self.revgraph.create_line(0, 0, 0, 0, fill=colours[i]))
+            self.r_line.append(self.revgraph.create_line(
+                0, 0, 0, 0, fill=colours[i]))
 
         self.tab.add(self.f1, text="Game")
         self.tab.add(self.f2, text="Sales")
@@ -315,8 +321,10 @@ class App:
                     for u in s["upgrades"]:
                         logging.debug("    Name: " + u["name"])
                         logging.debug("    Required: " + u["duration"])
-                        logging.debug("    Sales Multiplier: " + u["sales_multiplier"])
-                        logging.debug("    Price Modifier: " + u["price_modifier"])
+                        logging.debug("    Sales Multiplier: " +
+                                      u["sales_multiplier"])
+                        logging.debug("    Price Modifier: " +
+                                      u["price_modifier"])
                         logging.debug("    _________________")
                     logging.debug("_________________")
 
@@ -503,7 +511,8 @@ class SuggestionPopup(tk.Toplevel):
         self.listbox = tk.Listbox(self, height=10, width=20)
         self.listbox.pack(pady=15)
 
-        self.btn = tk.Button(self, text="Confirm selection", command=self.select)
+        self.btn = tk.Button(
+            self, text="Confirm selection", command=self.select)
         self.btn.pack(pady=10)
 
         for (idd, info) in suggestions:
