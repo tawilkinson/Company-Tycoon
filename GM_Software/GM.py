@@ -16,7 +16,6 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 class App:
     def __init__(self, master):
-
         self.script_dir = os.path.dirname(os.path.abspath(__file__))
         log_name = os.path.join(self.script_dir, f"GM.log")
         logging.basicConfig(filename=log_name, level=logging.DEBUG)
@@ -81,14 +80,11 @@ class App:
             textvariable=self.t,
         )
 
-        self.start = tk.Button(self.f1_top, text="START",
-                               command=self.gamestart)
+        self.start = tk.Button(self.f1_top, text="START", command=self.gamestart)
 
-        self.pausebtn = tk.Button(
-            self.f1_top, text="PAUSE", command=self.gamepause)
+        self.pausebtn = tk.Button(self.f1_top, text="PAUSE", command=self.gamepause)
 
-        self.reset = tk.Button(self.f1_top, text="RESET",
-                               command=self.gamereset)
+        self.reset = tk.Button(self.f1_top, text="RESET", command=self.gamereset)
 
         self.boon_one = tk.IntVar()
         self.boonone_btn = tk.Checkbutton(
@@ -110,16 +106,24 @@ class App:
 
         self.teamer()
 
-        self.colours = ["red", "blue", "green", "purple",
-                   "orange", "black", "yellow", "grey", "brown"]
+        self.colours = [
+            "red",
+            "blue",
+            "green",
+            "purple",
+            "orange",
+            "black",
+            "yellow",
+            "grey",
+            "brown",
+        ]
 
         self.salefig = Figure(figsize=(20, 4), dpi=100)
         self.saleplot = self.salefig.add_subplot(111)
         self.saleplot.set_title("Total Sales")
         self.saleplot.set_xlabel("Time / months")
         self.saleplot.set_ylabel("Sales / unit")
-        self.salegraph = FigureCanvasTkAgg(self.salefig,
-                               master = self.f2)
+        self.salegraph = FigureCanvasTkAgg(self.salefig, master=self.f2)
         self.s_line = []
         for i in range(self.tn):
             self.s_line.append([])
@@ -133,13 +137,14 @@ class App:
         self.revplot.set_title("Total Revenue")
         self.revplot.set_xlabel("Time / months")
         self.revplot.set_ylabel("Revenue / £")
-        self.revplot.ticklabel_format(style='plain')
-        self.revgraph = FigureCanvasTkAgg(self.revfig,
-                               master = self.f3)
+        self.revplot.ticklabel_format(style="plain")
+        self.revgraph = FigureCanvasTkAgg(self.revfig, master=self.f3)
         self.r_line = []
         for i in range(self.tn):
             self.r_line.append([])
-            self.update_plot(self.revplot, self.r_line, self.teams[i], self.initial_investment)
+            self.update_plot(
+                self.revplot, self.r_line, self.teams[i], self.initial_investment
+            )
         self.revplot.legend(loc="upper left")
         self.revgraph.draw()
         self.revgraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
@@ -164,7 +169,6 @@ class App:
         self.boonthree_btn.grid(sticky="W", row=0, column=9)
         self.text_box.grid()
 
-
     def write(self, message):
         self.mes.set(message)
 
@@ -187,7 +191,6 @@ class App:
         return row_n + 1
 
     def upgrade_bulider(self, upgrade, col_n, row_n, i, f):
-
         var = tk.IntVar()
         self.dyn_team[i].append(var)
         check_btn = tk.Checkbutton(f, text=upgrade["name"], variable=var)
@@ -342,10 +345,8 @@ class App:
                     for u in s["upgrades"]:
                         logging.debug("    Name: " + u["name"])
                         logging.debug("    Required: " + u["duration"])
-                        logging.debug("    Sales Multiplier: " +
-                                      u["sales_multiplier"])
-                        logging.debug("    Price Modifier: " +
-                                      u["price_modifier"])
+                        logging.debug("    Sales Multiplier: " + u["sales_multiplier"])
+                        logging.debug("    Price Modifier: " + u["price_modifier"])
                         logging.debug("    _________________")
                     logging.debug("_________________")
 
@@ -451,7 +452,6 @@ class App:
                 key = i + self.boon_data[2]["upgrade"]
                 self.cfg[key][1] = "0"
 
-
     def update_plot(self, graph, line, team, val):
         team = int(team[-1:]) - 1
         self.add_point(graph, line, team, val)
@@ -460,7 +460,7 @@ class App:
     def add_point(self, graph, line, team, y):
         line[team].append(y)
         graph.plot(line[team], color=self.colours[team], label=f"Team {team + 1}")
-        
+
     def teamer(self):
         self.teams = []
         self.sales = {}
@@ -525,11 +525,10 @@ class SuggestionPopup(tk.Toplevel):
         self.listbox = tk.Listbox(self, height=10, width=20)
         self.listbox.pack(pady=15)
 
-        self.btn = tk.Button(
-            self, text="Confirm selection", command=self.select)
+        self.btn = tk.Button(self, text="Confirm selection", command=self.select)
         self.btn.pack(pady=10)
 
-        for (idd, info) in suggestions:
+        for idd, info in suggestions:
             self.listbox.insert(tk.END, info)
 
         self.selection = None
