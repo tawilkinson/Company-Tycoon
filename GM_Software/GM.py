@@ -4,14 +4,14 @@ from ttkthemes import ThemedTk
 import time
 from threading import Thread
 from collections import defaultdict
-import sys
 import os
 import random
 import json
 import logging
-import threading
 import time
 from utils import get_configs
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 
 class App:
@@ -43,6 +43,8 @@ class App:
         self.f1_bottom = tk.Frame(self.f1)
 
         self.running = 0
+        self.points = 1
+        self.initial_investment = -4000000
         self.tn = 8
         vcmd = (
             master.register(self.validate),
@@ -70,7 +72,7 @@ class App:
 
         self.t = tk.StringVar(master, value="75:00")
         self.gt = int(self.t.get()[:-3]) * 60
-        self.mins, secs = divmod(self.gt, 60)
+        self.mins, _ = divmod(self.gt, 60)
         self.tmr = tk.Entry(
             self.f1_top,
             width=6,
@@ -108,22 +110,39 @@ class App:
 
         self.teamer()
 
-        self.salegraph = tk.Canvas(self.f2)
-
-        self.revgraph = tk.Canvas(self.f3)
-
-        colours = ["red", "blue", "green", "purple",
+        self.colours = ["red", "blue", "green", "purple",
                    "orange", "black", "yellow", "grey", "brown"]
 
+        self.salefig = Figure(figsize=(20, 4), dpi=100)
+        self.saleplot = self.salefig.add_subplot(111)
+        self.saleplot.set_title("Total Sales")
+        self.saleplot.set_xlabel("Time / months")
+        self.saleplot.set_ylabel("Sales / unit")
+        self.salegraph = FigureCanvasTkAgg(self.salefig,
+                               master = self.f2)
         self.s_line = []
         for i in range(self.tn):
-            self.s_line.append(self.salegraph.create_line(
-                0, 0, 0, 0, fill=colours[i]))
+            self.s_line.append([])
+            self.update_plot(self.saleplot, self.s_line, self.teams[i], 0)
+        self.saleplot.legend(loc="upper left")
+        self.salegraph.draw()
+        self.salegraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
 
+        self.revfig = Figure(figsize=(20, 4), dpi=100)
+        self.revplot = self.revfig.add_subplot(111)
+        self.revplot.set_title("Total Revenue")
+        self.revplot.set_xlabel("Time / months")
+        self.revplot.set_ylabel("Revenue / £")
+        self.revplot.ticklabel_format(style='plain')
+        self.revgraph = FigureCanvasTkAgg(self.revfig,
+                               master = self.f3)
         self.r_line = []
         for i in range(self.tn):
-            self.r_line.append(self.revgraph.create_line(
-                0, 0, 0, 0, fill=colours[i]))
+            self.r_line.append([])
+            self.update_plot(self.revplot, self.r_line, self.teams[i], self.initial_investment)
+        self.revplot.legend(loc="upper left")
+        self.revgraph.draw()
+        self.revgraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
 
         self.tab.add(self.f1, text="Game")
         self.tab.add(self.f2, text="Sales")
@@ -144,8 +163,7 @@ class App:
         self.boontwo_btn.grid(sticky="W", row=0, column=8)
         self.boonthree_btn.grid(sticky="W", row=0, column=9)
         self.text_box.grid()
-        self.salegraph.grid(sticky="N")
-        self.revgraph.grid(sticky="N")
+
 
     def write(self, message):
         self.mes.set(message)
@@ -198,7 +216,7 @@ class App:
         self.pause = 0
         self.gt = int(self.t.get()[:-3]) * 60
         self.points = int(self.t_old[:-3]) - int(self.gt / 60)
-        while self.gt:
+        while self.gt > 0:
             if self.reset_flg == 1:
                 self.t.set(self.t_old)
                 break
@@ -211,6 +229,7 @@ class App:
             self.gt -= int(self.spd.get())
             self.points = int(self.t_old[:-3]) - int(self.gt / 60)
             self.t.set(self.timeformat)
+        self.running = 0
         self.write("Game Finished!")
 
     def gamestart(self):
@@ -292,13 +311,15 @@ class App:
                     self.sales[i] = self.sales[i] + 1
                     self.rev[i] = self.rev[i] + rev
 
-            self.update_plot(self.salegraph, self.s_line, i, self.sales[i])
-            self.update_plot(self.revgraph, self.r_line, i, self.rev[i])
+            self.update_plot(self.saleplot, self.s_line, i, self.sales[i])
+            self.update_plot(self.revplot, self.r_line, i, self.rev[i])
 
             data = data + i + ", " + str(self.sales[i]) + ", "
             sales = sales + str(self.sales[i]) + ", "
             revenue = revenue + str(self.rev[i]) + ", "
 
+        self.salegraph.draw()
+        self.revgraph.draw()
         data = data[:-2] + "\n"
         sales = sales[:-2] + "\n"
         revenue = revenue[:-2] + "\n"
@@ -430,23 +451,16 @@ class App:
                 key = i + self.boon_data[2]["upgrade"]
                 self.cfg[key][1] = "0"
 
+
     def update_plot(self, graph, line, team, val):
         team = int(team[-1:]) - 1
-        self.add_point(graph, line[team], val)
-        graph.xview_moveto(1.0)
+        self.add_point(graph, line, team, val)
+        graph.set_xticks(range(self.points), minor=False)
 
-    def add_point(self, graph, line, y):
-        coords = graph.coords(line)
-        w = graph.winfo_width()
-        h = graph.winfo_height()
-        for n in range(0, self.points):
-            x = (w * n) / self.points
-            coords.append(x)
-            coords.append(h - (y / h))
-        # coords = coords[-200:]  # keep # of points to a manageable size
-        graph.coords(line, *coords)
-        graph.configure(scrollregion=graph.bbox("all"))
-
+    def add_point(self, graph, line, team, y):
+        line[team].append(y)
+        graph.plot(line[team], color=self.colours[team], label=f"Team {team + 1}")
+        
     def teamer(self):
         self.teams = []
         self.sales = {}
@@ -455,7 +469,7 @@ class App:
         for i in range(self.tn):
             self.teams.append("Team " + str(i + 1))
             self.sales[self.teams[i]] = 0
-            self.rev[self.teams[i]] = -4000000
+            self.rev[self.teams[i]] = self.initial_investment
             self.framer(i)
             self.prod[self.teams[i]] = False
 
@@ -467,7 +481,7 @@ class App:
         for i in range(self.tn):
             self.teams.append("Team " + str(i + 1))
             self.sales[self.teams[i]] = 0
-            self.rev[self.teams[i]] = -4000000
+            self.rev[self.teams[i]] = self.initial_investment
             self.prod[self.teams[i]] = False
 
     def validate(
