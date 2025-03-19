@@ -138,16 +138,14 @@ class App:
         self.revgraph: FigureCanvasTkAgg = FigureCanvasTkAgg(
             self.revfig, master=self.f3
         )
-        self.salegraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-        self.revgraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
         self.draw_graphs()
 
         self.tab.add(self.f1, text="Game")
         self.tab.add(self.f2, text="Sales")
         self.tab.add(self.f3, text="Revenue")
 
-        self.fmaster.grid()
-        self.tab.grid()
+        self.fmaster.pack(expand=1, fill="both")
+        self.tab.pack(expand=1, fill="both")
         self.f1_top.grid()
         self.f1_bottom.grid()
         self.spdlbl.grid(sticky="W", row=0, column=0)
@@ -161,6 +159,8 @@ class App:
         self.boontwo_btn.grid(sticky="W", row=0, column=8)
         self.boonthree_btn.grid(sticky="W", row=0, column=9)
         self.text_box.grid()
+        self.salegraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.revgraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
     def write(self, message: str) -> None:
         self.mes.set(message)
