@@ -120,34 +120,15 @@ class App:
 
         self.salefig = Figure(figsize=(20, 4), dpi=100)
         self.saleplot = self.salefig.add_subplot(111)
-        self.saleplot.set_title("Total Sales")
-        self.saleplot.set_xlabel("Time / months")
-        self.saleplot.set_ylabel("Sales / unit")
-        self.salegraph = FigureCanvasTkAgg(self.salefig, master=self.f2)
-        self.s_line = []
-        for i in range(self.tn):
-            self.s_line.append([])
-            self.update_plot(self.saleplot, self.s_line, self.teams[i], 0)
-        self.saleplot.legend(loc="upper left")
-        self.salegraph.draw()
-        self.salegraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
-
         self.revfig = Figure(figsize=(20, 4), dpi=100)
         self.revplot = self.revfig.add_subplot(111)
-        self.revplot.set_title("Total Revenue")
-        self.revplot.set_xlabel("Time / months")
-        self.revplot.set_ylabel("Revenue / £")
-        self.revplot.ticklabel_format(style="plain")
+        self.tclear()
+
+        self.salegraph = FigureCanvasTkAgg(self.salefig, master=self.f2)
         self.revgraph = FigureCanvasTkAgg(self.revfig, master=self.f3)
-        self.r_line = []
-        for i in range(self.tn):
-            self.r_line.append([])
-            self.update_plot(
-                self.revplot, self.r_line, self.teams[i], self.initial_investment
-            )
-        self.revplot.legend(loc="upper left")
-        self.revgraph.draw()
+        self.salegraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
         self.revgraph.get_tk_widget().pack(side=tk.LEFT, fill=tk.BOTH)
+        self.draw_graphs()
 
         self.tab.add(self.f1, text="Game")
         self.tab.add(self.f2, text="Sales")
@@ -265,6 +246,7 @@ class App:
         self.pausebtn.config(text="PAUSE")
         self.write("Resetting Game")
         self.tclear()
+        self.draw_graphs()
 
     def game(self):
         self.loadcfg()
@@ -478,11 +460,34 @@ class App:
         self.sales = {}
         self.rev = {}
         self.prod = {}
+        self.s_line = []
+        self.r_line = []
+        self.saleplot.cla()
+        self.saleplot.set_title("Total Sales")
+        self.saleplot.set_xlabel("Time / months")
+        self.saleplot.set_ylabel("Sales / unit")
+        self.revplot.cla()
+        self.revplot.set_title("Total Revenue")
+        self.revplot.set_xlabel("Time / months")
+        self.revplot.set_ylabel("Revenue / £")
+        self.revplot.ticklabel_format(style="plain")
         for i in range(self.tn):
             self.teams.append("Team " + str(i + 1))
             self.sales[self.teams[i]] = 0
             self.rev[self.teams[i]] = self.initial_investment
             self.prod[self.teams[i]] = False
+            self.s_line.append([])
+            self.update_plot(self.saleplot, self.s_line, self.teams[i], 0)
+            self.r_line.append([])
+            self.update_plot(
+                self.revplot, self.r_line, self.teams[i], self.initial_investment
+            )
+        self.saleplot.legend(loc="upper left")
+        self.revplot.legend(loc="upper left")
+
+    def draw_graphs(self):
+        self.salegraph.draw()
+        self.revgraph.draw()
 
     def validate(
         self,
